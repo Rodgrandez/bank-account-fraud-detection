@@ -51,6 +51,14 @@ def run(splits, fitted, cols, tuning, dropped, n_boot=None):
         - decision.confusion_at(y_f[i], b["s_f"][i] >= b["t"])["recall"], len(y_f), n_boot)
     res["comparison"] = {"xgb_minus_lr_recall": diff, "significant": bool(diff["lo"] > 0 or diff["hi"] < 0)}
 
+    def recall_at_budget_fpr(y, s):
+        return decision.confusion_at(y, s >= decision.fpr_threshold(s, y, config.FPR_BUDGET))["recall"]
+
+    # sensitivity: both models at the same 5% false-positive rate (threshold re-set within each replicate)
+    res["comparison"]["xgb_minus_lr_recall_equal_fpr"] = bootstrap.interval(
+        lambda i: recall_at_budget_fpr(y_f[i], a["s_f"][i]) - recall_at_budget_fpr(y_f[i], b["s_f"][i]),
+        len(y_f), n_boot)
+
     res["cost"] = {}
     for ratio in config.COST_RATIOS:
         th = decision.cost_threshold(ratio)
@@ -140,25 +148,37 @@ def run(splits, fitted, cols, tuning, dropped, n_boot=None):
 
 
 def recommend(res: dict) -> dict:
+    """Rule declared in the plan, judged on the policy that would be deployed (a single threshold)."""
     diff = res["comparison"]["xgb_minus_lr_recall"]
-    after = res["fairness"]["after"]["fpr_ratio"]
+    before, after = res["fairness"]["before"]["fpr_ratio"], res["fairness"]["after"]["fpr_ratio"]
     alarms = res["drift"]["monitoring"]
     rec = res["future"]["xgb"]["recall_budget"]
     fpr = res["future"]["xgb"]["fpr_realized"]
     evidence = [
         (f"Recall at the 5% false-positive budget in the unseen months: {rec['value']:.3f} "
-        f"(95% CI {rec['lo']:.3f}-{rec['hi']:.3f}); realised false-positive rate {fpr['value']:.3f}."),
+         f"(95% CI {rec['lo']:.3f}-{rec['hi']:.3f}); realised false-positive rate {fpr['value']:.3f}."),
         (f"XGBoost minus logistic regression recall: {diff['value']:+.3f} (95% CI {diff['lo']:+.3f} to "
-        f"{diff['hi']:+.3f})."),
-        (f"False-positive-rate ratio (age>=50 / <50) after group thresholds: {after['value']:.2f} "
-        f"(95% CI {after['lo']:.2f}-{after['hi']:.2f}); before: {res['fairness']['before']['fpr_ratio']['value']:.2f}."),
+         f"{diff['hi']:+.3f})."),
+        (f"False-positive-rate ratio (age>=50 / <50) with the single threshold: {before['value']:.2f} "
+         f"(95% CI {before['lo']:.2f}-{before['hi']:.2f}); group thresholds would bring it to {after['value']:.2f} "
+         f"but treat applicants differently by age."),
         "Monitoring rules triggered in the unseen months: "
         + (", ".join(f"{a['rule']} (month {a['month']})" for a in alarms) if alarms else "none") + ".",
     ]
+    conditions = []
+    if alarms:
+        conditions.append("Monthly monitoring with the declared rules; triggered in months 6-7: "
+                          + ", ".join(sorted({a["rule"] for a in alarms})) + ".")
+    if fpr["lo"] > config.FPR_BUDGET:
+        conditions.append(f"The realised false-positive rate ({fpr['value']:.3f}) exceeds the 5% budget: re-set the "
+                          "budget threshold every month on the latest labelled month.")
+    if not before["lo"] <= 1 <= before["hi"]:
+        conditions.append(f"Applicants aged 50+ are flagged {before['value']:.2f}x as often when legitimate: a "
+                          "documented fairness and legal review is required before go-live.")
     if diff["hi"] < 0:
         decision_ = "postpone"
-    elif alarms or not (after["lo"] <= 1 <= after["hi"]):
+    elif conditions:
         decision_ = "approve with conditions"
     else:
         decision_ = "approve"
-    return {"decision": decision_, "evidence": evidence}
+    return {"decision": decision_, "evidence": evidence, "conditions": conditions}

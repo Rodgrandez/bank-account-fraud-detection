@@ -102,7 +102,12 @@
       "lo": 0.07516866820438244,
       "hi": 0.10426742829442744
     },
-    "significant": true
+    "significant": true,
+    "xgb_minus_lr_recall_equal_fpr": {
+      "value": 0.060111188325225884,
+      "lo": 0.045066390802821724,
+      "hi": 0.07468410305676343
+    }
   },
   "cost": {
     "20": {
@@ -489,8 +494,13 @@
     "evidence": [
       "Recall at the 5% false-positive budget in the unseen months: 0.582 (95% CI 0.564-0.601); realised false-positive rate 0.062.",
       "XGBoost minus logistic regression recall: +0.090 (95% CI +0.075 to +0.104).",
-      "False-positive-rate ratio (age>=50 / <50) after group thresholds: 1.10 (95% CI 1.05-1.15); before: 2.31.",
+      "False-positive-rate ratio (age>=50 / <50) with the single threshold: 2.31 (95% CI 2.23-2.39); group thresholds would bring it to 1.10 but treat applicants differently by age.",
       "Monitoring rules triggered in the unseen months: fraud rate outside months 0-5 range (month 6), fraud rate outside months 0-5 range (month 7)."
+    ],
+    "conditions": [
+      "Monthly monitoring with the declared rules; triggered in months 6-7: fraud rate outside months 0-5 range.",
+      "The realised false-positive rate (0.062) exceeds the 5% budget: re-set the budget threshold every month on the latest labelled month.",
+      "Applicants aged 50+ are flagged 2.31x as often when legitimate: a documented fairness and legal review is required before go-live."
     ]
   }
 }

@@ -43,7 +43,7 @@ def test_recommendation_rule():
     base = {"comparison": {"xgb_minus_lr_recall": {"value": 0.1, "lo": 0.05, "hi": 0.15}},
             "drift": {"monitoring": []},
             "fairness": {"after": {"fpr_ratio": {"value": 1.0, "lo": 0.9, "hi": 1.1}},
-                         "before": {"fpr_ratio": {"value": 1.5, "lo": 1.3, "hi": 1.7}}},
+                         "before": {"fpr_ratio": {"value": 1.0, "lo": 0.95, "hi": 1.05}}},
             "future": {"xgb": {"recall_budget": {"value": 0.5, "lo": 0.45, "hi": 0.55},
                                "fpr_realized": {"value": 0.05, "lo": 0.049, "hi": 0.051}}}}
     assert evaluate.recommend(base)["decision"] == "approve"
@@ -51,6 +51,33 @@ def test_recommendation_rule():
     assert evaluate.recommend(alarm)["decision"] == "approve with conditions"
     worse = {**base, "comparison": {"xgb_minus_lr_recall": {"value": -0.1, "lo": -0.15, "hi": -0.05}}}
     assert evaluate.recommend(worse)["decision"] == "postpone"
+
+
+def test_recommendation_judges_the_deployed_single_threshold_policy():
+    # group thresholds are not recommended for deployment, so the fairness condition must use the single threshold
+    base = {"comparison": {"xgb_minus_lr_recall": {"value": 0.1, "lo": 0.05, "hi": 0.15}},
+            "drift": {"monitoring": []},
+            "fairness": {"after": {"fpr_ratio": {"value": 1.0, "lo": 0.95, "hi": 1.05}},
+                         "before": {"fpr_ratio": {"value": 2.3, "lo": 2.2, "hi": 2.4}}},
+            "future": {"xgb": {"recall_budget": {"value": 0.5, "lo": 0.45, "hi": 0.55},
+                               "fpr_realized": {"value": 0.062, "lo": 0.061, "hi": 0.063}}}}
+    out = evaluate.recommend(base)
+    assert out["decision"] == "approve with conditions"
+    assert any("age" in c for c in out["conditions"]) and any("false-positive" in c for c in out["conditions"])
+
+
+def test_results_include_equal_fpr_comparison():
+    res, _ = _run()
+    d = res["comparison"]["xgb_minus_lr_recall_equal_fpr"]
+    assert d["lo"] <= d["value"] <= d["hi"]
+
+
+def test_readme_explains_budget_overshoot_and_fairness_caveats():
+    res, _ = _run()
+    text = report.results_markdown(res)
+    low = text.lower()
+    assert "budget overshoot" in low and "equal false-positive rate" in low
+    assert "base rates" in text and "with age as an input" in text and "Deviation from the pre-declared plan" in text
 
 
 def test_readme_block_uses_results(tmp_path):
