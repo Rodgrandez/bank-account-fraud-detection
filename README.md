@@ -52,5 +52,7 @@ See [the model card](reports/model_card.md) for limitations and monitoring rules
 conda env create -f environment.yml && conda activate fraud-detection
 make all      # needs a Kaggle API token; downloads the data, tunes, evaluates and writes reports/
 ```
+The hyperparameter search (8 XGBoost configurations x 2 rolling folds, twice, on ~600k rows) took about 8 hours on a
+laptop; evaluation and reports take a few minutes.
 
 License: MIT (code). Data: CC BY-NC-SA 4.0 (Feedzai).

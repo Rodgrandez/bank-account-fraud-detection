@@ -415,14 +415,14 @@
     "psi_top_features": {
       "housing_status": 0.02949589534613703,
       "device_os": 0.011856782521780245,
-      "keep_alive_session": 0.0,
+      "keep_alive_session": 0.0074412091154193345,
       "employment_status": 0.023002420758471663,
-      "has_other_cards": 0.0,
+      "has_other_cards": 4.341579876273055e-05,
       "payment_type": 0.020400241399925315,
-      "phone_home_valid": 0.0,
-      "email_is_free": 0.0,
+      "phone_home_valid": 0.024729467350845937,
+      "email_is_free": 0.015999042640720506,
       "proposed_credit_limit": 0.07052519644870281,
-      "device_distinct_emails_8w": 0.0020164289489604764
+      "device_distinct_emails_8w": 0.01717634725042724
     }
   },
   "data": {

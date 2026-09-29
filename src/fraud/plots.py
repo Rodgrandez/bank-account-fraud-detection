@@ -92,7 +92,7 @@ def drift_plot(r, arrays, folder) -> Path:
     d = pd.DataFrame(r["drift"]["by_month"])
     fig, axes = plt.subplots(1, 3, figsize=(12, 3.6))
     for ax, col, title in zip(axes, ("fraud_rate", "psi_score", "recall"),
-                              ("Fraud rate", "Score PSI vs months 0-4", "Recall at 5% budget threshold"),
+                              ("Fraud rate", "Score PSI vs months 0-4", "Recall at 5% budget (months 0-4 in-sample)"),
                               strict=True):
         ax.plot(d["month"], d[col], marker="o")
         ax.axvspan(5.5, 7.5, color="grey", alpha=0.15)
