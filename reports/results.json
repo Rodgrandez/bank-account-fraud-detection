@@ -1,0 +1,496 @@
+{
+  "future": {
+    "lr": {
+      "recall_budget": {
+        "value": 0.4923558026407227,
+        "lo": 0.47400806640727217,
+        "hi": 0.5114299959526115
+      },
+      "fpr_realized": {
+        "value": 0.05188168186293183,
+        "lo": 0.050944499055107395,
+        "hi": 0.052851398798860943
+      },
+      "pr_auc": {
+        "value": 0.1506992772114219,
+        "lo": 0.13906976374976476,
+        "hi": 0.1645483580501451
+      },
+      "roc_auc": 0.8720552826688495,
+      "recall_oracle_5fpr": 0.4812369701181376,
+      "valid_b_recall_budget": 0.47875354107648727,
+      "brier": {
+        "raw": 0.013028640302056423,
+        "isotonic": 0.012799777675609584,
+        "platt": 0.012772462228977126
+      }
+    },
+    "xgb": {
+      "recall_budget": {
+        "value": 0.5823488533703961,
+        "lo": 0.5641700732812606,
+        "hi": 0.6005612005722177
+      },
+      "fpr_realized": {
+        "value": 0.06183552413509917,
+        "lo": 0.060836600724106786,
+        "hi": 0.06294453033325825
+      },
+      "pr_auc": {
+        "value": 0.19221617212403605,
+        "lo": 0.17830746630881822,
+        "hi": 0.20634267204430695
+      },
+      "roc_auc": 0.892892360308787,
+      "recall_oracle_5fpr": 0.5413481584433635,
+      "valid_b_recall_budget": 0.5524079320113314,
+      "brier": {
+        "raw": 0.012478538788855076,
+        "isotonic": 0.012472319107116128,
+        "platt": 0.012469352658978304
+      }
+    },
+    "xgb_with_age": {
+      "recall_budget": {
+        "value": 0.5851285615010424,
+        "lo": 0.5661718050164228,
+        "hi": 0.6029183123800879
+      },
+      "fpr_realized": {
+        "value": 0.06054429509283492,
+        "lo": 0.05954854127387558,
+        "hi": 0.061577122589543114
+      },
+      "pr_auc": {
+        "value": 0.19832149419947223,
+        "lo": 0.1837014329271533,
+        "hi": 0.2127776449619082
+      },
+      "roc_auc": 0.894974274140441,
+      "recall_oracle_5fpr": 0.5500347463516331,
+      "valid_b_recall_budget": 0.5509915014164306,
+      "brier": {
+        "raw": 0.012426369823515415,
+        "isotonic": 0.012392052993181399,
+        "platt": 0.012397725379123831
+      }
+    }
+  },
+  "tuning": {
+    "lr": {
+      "C": 0.01,
+      "cv_pr_auc": 0.13325991784754065
+    },
+    "xgb": {
+      "max_depth": 3,
+      "learning_rate": 0.1,
+      "min_child_weight": 10,
+      "cv_pr_auc": 0.17083180909004136,
+      "n_estimators": 296
+    },
+    "xgb_with_age": {
+      "max_depth": 3,
+      "learning_rate": 0.05,
+      "min_child_weight": 1,
+      "cv_pr_auc": 0.17285755563852984,
+      "n_estimators": 578
+    }
+  },
+  "comparison": {
+    "xgb_minus_lr_recall": {
+      "value": 0.0899930507296734,
+      "lo": 0.07516866820438244,
+      "hi": 0.10426742829442744
+    },
+    "significant": true
+  },
+  "cost": {
+    "20": {
+      "threshold": 0.05,
+      "cost_per_1000": {
+        "value": 185.86807537156542,
+        "lo": 178.846622864139,
+        "hi": 193.05793347674026
+      },
+      "review_none": 280.76542234319135,
+      "review_all": 1000.0,
+      "recall": 0.5191104933981932,
+      "alert_rate": 0.05085092995010024,
+      "valid_b_regret_pct": 0.010356255178138483
+    },
+    "50": {
+      "threshold": 0.02,
+      "cost_per_1000": {
+        "value": 321.27544375667645,
+        "lo": 309.14268014887006,
+        "hi": 332.96774319426765
+      },
+      "review_none": 701.9135558579783,
+      "review_all": 1000.0,
+      "recall": 0.7894371091035441,
+      "alert_rate": 0.17347849627580958,
+      "valid_b_regret_pct": 1.1903372622242823
+    },
+    "100": {
+      "threshold": 0.01,
+      "cost_per_1000": {
+        "value": 444.30298862012285,
+        "lo": 425.6810610162382,
+        "hi": 464.5661696201667
+      },
+      "review_none": 1403.8271117159566,
+      "review_all": 1000.0,
+      "recall": 0.8568450312717165,
+      "alert_rate": 0.24333816234250846,
+      "valid_b_regret_pct": 0.0
+    }
+  },
+  "lift": {
+    "top5_capture": 0.5156358582348853,
+    "top10_capture": 0.6685198054204309,
+    "deciles": [
+      {
+        "decile": 1,
+        "n": 20502,
+        "fraud_rate": 0.09384450297531947,
+        "capture": 0.6685198054204309,
+        "lift": 6.684904586335379
+      },
+      {
+        "decile": 2,
+        "n": 20501,
+        "fraud_rate": 0.02058436173845178,
+        "capture": 0.8151494093120223,
+        "lift": 1.4663031912306248
+      },
+      {
+        "decile": 3,
+        "n": 20501,
+        "fraud_rate": 0.010877518169845373,
+        "capture": 0.8926337734537874,
+        "lift": 0.7748474209583635
+      },
+      {
+        "decile": 4,
+        "n": 20501,
+        "fraud_rate": 0.005950929222964733,
+        "capture": 0.9350243224461432,
+        "lift": 0.4239075576543513
+      },
+      {
+        "decile": 5,
+        "n": 20501,
+        "fraud_rate": 0.0036095800204868056,
+        "capture": 0.9607366226546212,
+        "lift": 0.2571242562821475
+      },
+      {
+        "decile": 6,
+        "n": 20501,
+        "fraud_rate": 0.0019511243353982732,
+        "capture": 0.9746351633078527,
+        "lift": 0.1389860844768365
+      },
+      {
+        "decile": 7,
+        "n": 20501,
+        "fraud_rate": 0.0013170089263938344,
+        "capture": 0.9840166782487839,
+        "lift": 0.09381560702186463
+      },
+      {
+        "decile": 8,
+        "n": 20501,
+        "fraud_rate": 0.0010731183844690502,
+        "capture": 0.9916608756080612,
+        "lift": 0.07644234646226006
+      },
+      {
+        "decile": 9,
+        "n": 20501,
+        "fraud_rate": 0.0008292278425442661,
+        "capture": 0.9975677553856845,
+        "lift": 0.059069085902655506
+      },
+      {
+        "decile": 10,
+        "n": 20501,
+        "fraud_rate": 0.0003414467586946978,
+        "capture": 1.0,
+        "lift": 0.024322564783446386
+      }
+    ]
+  },
+  "fairness": {
+    "before": {
+      "fpr_ratio": {
+        "value": 2.3092724927961763,
+        "lo": 2.2327094797683524,
+        "hi": 2.3915222215737826
+      },
+      "rates": {
+        "age>=50": {
+          "n": 33779,
+          "n_fraud": 989,
+          "fpr": 0.11777981091796279,
+          "recall": 0.6926188068756319
+        },
+        "age<50": {
+          "n": 171232,
+          "n_fraud": 1889,
+          "fpr": 0.05100299392357523,
+          "recall": 0.5246161990471149
+        }
+      }
+    },
+    "after": {
+      "fpr_ratio": {
+        "value": 1.099567978862583,
+        "lo": 1.0486733808129327,
+        "hi": 1.1510092541592172
+      },
+      "rates": {
+        "age>=50": {
+          "n": 33779,
+          "n_fraud": 989,
+          "fpr": 0.06709362610551997,
+          "recall": 0.5571284125379171
+        },
+        "age<50": {
+          "n": 171232,
+          "n_fraud": 1889,
+          "fpr": 0.06101817022256603,
+          "recall": 0.5622022233986236
+        }
+      }
+    },
+    "with_age": {
+      "fpr_ratio": {
+        "value": 3.0639882539501415,
+        "lo": 2.9616266883006794,
+        "hi": 3.1696976026698254
+      },
+      "recall_budget": {
+        "value": 0.5851285615010424,
+        "lo": 0.5661718050164228,
+        "hi": 0.6029183123800879
+      }
+    },
+    "cost_of_correction": {
+      "recall_before": 0.5823488533703961,
+      "recall_after": 0.5604586518415566,
+      "cost_central_before": 362.2976328099468,
+      "cost_central_after": 377.52120617918064
+    },
+    "by_month": [
+      {
+        "month": 0,
+        "fpr_ratio": 2.8327197287457966,
+        "in_sample": true
+      },
+      {
+        "month": 1,
+        "fpr_ratio": 2.8815938210186607,
+        "in_sample": true
+      },
+      {
+        "month": 2,
+        "fpr_ratio": 3.1764852454745762,
+        "in_sample": true
+      },
+      {
+        "month": 3,
+        "fpr_ratio": 2.8754930687419593,
+        "in_sample": true
+      },
+      {
+        "month": 4,
+        "fpr_ratio": 2.5026505787131965,
+        "in_sample": true
+      },
+      {
+        "month": 5,
+        "fpr_ratio": 2.2714951442281643,
+        "in_sample": false
+      },
+      {
+        "month": 6,
+        "fpr_ratio": 2.24315365936378,
+        "in_sample": false
+      },
+      {
+        "month": 7,
+        "fpr_ratio": 2.3018623905919053,
+        "in_sample": false
+      }
+    ]
+  },
+  "drift": {
+    "by_month": [
+      {
+        "month": 0,
+        "fraud_rate": 0.011325883418906675,
+        "psi_score": 0.018064969706917008,
+        "recall": 0.5966666666666667,
+        "fpr": 0.06658775011455628,
+        "pr_auc": 0.19720551042656592,
+        "in_sample": true
+      },
+      {
+        "month": 1,
+        "fraud_rate": 0.009387243378780755,
+        "psi_score": 0.009674459151375278,
+        "recall": 0.6101836393989983,
+        "fpr": 0.051620762209109175,
+        "pr_auc": 0.1720615609524423,
+        "in_sample": true
+      },
+      {
+        "month": 2,
+        "fraud_rate": 0.008745866154666044,
+        "psi_score": 0.00805546231115541,
+        "recall": 0.5651085141903172,
+        "fpr": 0.045912167387189666,
+        "pr_auc": 0.16331907844855184,
+        "in_sample": true
+      },
+      {
+        "month": 3,
+        "fraud_rate": 0.009222451900143107,
+        "psi_score": 0.019239411325080297,
+        "recall": 0.6932471264367817,
+        "fpr": 0.06966511528379607,
+        "pr_auc": 0.19122364693289148,
+        "in_sample": true
+      },
+      {
+        "month": 4,
+        "fraud_rate": 0.011371200789405674,
+        "psi_score": 0.004329374610038774,
+        "recall": 0.6955922865013774,
+        "fpr": 0.07298853761515856,
+        "pr_auc": 0.212955737315124,
+        "in_sample": true
+      },
+      {
+        "month": 5,
+        "fraud_rate": 0.01182504630289215,
+        "psi_score": 0.00474772621681115,
+        "recall": 0.5435861091424522,
+        "fpr": 0.050130605875568224,
+        "pr_auc": 0.1924292825513321,
+        "in_sample": false
+      },
+      {
+        "month": 6,
+        "fraud_rate": 0.013405073589231566,
+        "psi_score": 0.0025809119592811094,
+        "recall": 0.5820689655172414,
+        "fpr": 0.06863884255701944,
+        "pr_auc": 0.1753340704360055,
+        "in_sample": false
+      },
+      {
+        "month": 7,
+        "fraud_rate": 0.014745515938167962,
+        "psi_score": 0.009713227254350514,
+        "recall": 0.5826330532212886,
+        "fpr": 0.054226274694754495,
+        "pr_auc": 0.2160798137498516,
+        "in_sample": false
+      }
+    ],
+    "monitoring": [
+      {
+        "month": 6,
+        "rule": "fraud rate outside months 0-5 range",
+        "value": 0.013405073589231566
+      },
+      {
+        "month": 7,
+        "rule": "fraud rate outside months 0-5 range",
+        "value": 0.014745515938167962
+      }
+    ],
+    "psi_top_features": {
+      "housing_status": 0.02949589534613703,
+      "device_os": 0.011856782521780245,
+      "keep_alive_session": 0.0,
+      "employment_status": 0.023002420758471663,
+      "has_other_cards": 0.0,
+      "payment_type": 0.020400241399925315,
+      "phone_home_valid": 0.0,
+      "email_is_free": 0.0,
+      "proposed_credit_limit": 0.07052519644870281,
+      "device_distinct_emails_8w": 0.0020164289489604764
+    }
+  },
+  "data": {
+    "n_rows": 1000000,
+    "prevalence": 0.011029,
+    "by_month": [
+      {
+        "month": 0,
+        "n": 132440,
+        "fraud_rate": 0.011325883418906675
+      },
+      {
+        "month": 1,
+        "n": 127620,
+        "fraud_rate": 0.009387243378780755
+      },
+      {
+        "month": 2,
+        "n": 136979,
+        "fraud_rate": 0.008745866154666044
+      },
+      {
+        "month": 3,
+        "n": 150936,
+        "fraud_rate": 0.009222451900143107
+      },
+      {
+        "month": 4,
+        "n": 127691,
+        "fraud_rate": 0.011371200789405674
+      },
+      {
+        "month": 5,
+        "n": 119323,
+        "fraud_rate": 0.01182504630289215
+      },
+      {
+        "month": 6,
+        "n": 108168,
+        "fraud_rate": 0.013405073589231566
+      },
+      {
+        "month": 7,
+        "n": 96843,
+        "fraud_rate": 0.014745515938167962
+      }
+    ],
+    "dropped_constant": [
+      "device_fraud_count"
+    ],
+    "age_groups": {
+      "age<50": {
+        "n": 816987,
+        "fraud_rate": 0.008254721311355016
+      },
+      "age>=50": {
+        "n": 183013,
+        "fraud_rate": 0.023413637282597412
+      }
+    }
+  },
+  "recommendation": {
+    "decision": "approve with conditions",
+    "evidence": [
+      "Recall at the 5% false-positive budget in the unseen months: 0.582 (95% CI 0.564-0.601); realised false-positive rate 0.062.",
+      "XGBoost minus logistic regression recall: +0.090 (95% CI +0.075 to +0.104).",
+      "False-positive-rate ratio (age>=50 / <50) after group thresholds: 1.10 (95% CI 1.05-1.15); before: 2.31.",
+      "Monitoring rules triggered in the unseen months: fraud rate outside months 0-5 range (month 6), fraud rate outside months 0-5 range (month 7)."
+    ]
+  }
+}

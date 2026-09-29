@@ -63,3 +63,12 @@ def test_bootstrap_ignores_nan_replicates():
     y = np.r_[1, np.zeros(99, int)]                           # most resamples miss the single fraud
     out = bootstrap.interval(lambda i: y[i].sum() / y[i].sum() if y[i].sum() else np.nan, 100, n_boot=200, seed=0)
     assert out["lo"] == out["hi"] == 1.0
+
+
+def test_psi_detects_shift_in_binary_variable():
+    # quantile edges collapse on a 0/1 variable; low-cardinality numerics must be binned by value
+    # with 38.7% ones every decile edge is 0 or 1, so a 38.7% -> 46.5% shift (phone_home_valid in BAF) was scored 0
+    a = np.r_[np.zeros(6130), np.ones(3870)]
+    b = np.r_[np.zeros(5350), np.ones(4650)]
+    assert drift.psi(a, a) == pytest.approx(0.0)
+    assert drift.psi(a, b) == pytest.approx(drift.psi_categorical(a, b)) and drift.psi(a, b) > 0.02

@@ -10,6 +10,21 @@ design: tuned on months 0-4, calibrated and thresholded on month 5, and evaluate
 ![Precision-recall](reports/figures/performance.png)
 
 <!-- RESULTS:START -->
+Evaluated once on the unseen months 6-7 with everything fixed on months 0-5. 95% bootstrap intervals in brackets.
+
+| Metric (months 6-7) | XGBoost | Logistic regression |
+|---|---|---|
+| Recall at the 5% false-positive budget (threshold fixed on month 5) | 0.582 [0.564, 0.601] | 0.492 [0.474, 0.511] |
+| Realised false-positive rate | 0.062 [0.061, 0.063] | 0.052 [0.051, 0.053] |
+| PR-AUC | 0.192 [0.178, 0.206] | 0.151 [0.139, 0.165] |
+| Brier score (isotonic) | 0.0125 | 0.0128 |
+| Recall at 5% FPR, threshold re-set on months 6-7 (paper-comparable) | 0.541 | 0.481 |
+
+- **Model comparison:** XGBoost minus logistic regression recall 0.090 [0.075, 0.104] (significant).
+- **Cost (loss per missed fraud = 50 reviews):** 321.3 review-units per 1,000 applications with the model, vs 701.9 reviewing nothing and 1000 reviewing everything.
+- **Fairness:** false-positive-rate ratio (age>=50 / <50) 2.31 [2.23, 2.39] before and 1.10 [1.05, 1.15] after group thresholds; recall 0.582 -> 0.560.
+- **Monitoring alarms in months 6-7:** 2.
+- **Recommendation to the risk committee: approve with conditions.**
 <!-- RESULTS:END -->
 
 ## Data
